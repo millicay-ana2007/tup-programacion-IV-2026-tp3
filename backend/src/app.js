@@ -1,11 +1,16 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import passport from 'passport';
+import './config/passport.js';
 import { pool } from './config/db.js';
+import { requireAuth } from './middlewares/auth.js';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
+app.use(passport.initialize());
 
 app.get('/api/health', async (req, res, next) => {
   try {
@@ -16,6 +21,11 @@ app.get('/api/health', async (req, res, next) => {
   }
 });
 
+app.use('/api/auth', authRoutes);
+
+// Ruta protegida de prueba (después se puede quitar)
+app.get('/api/perfil', requireAuth, (req, res) => res.json(req.user));
+
 app.use((req, res) => res.status(404).json({ message: 'Ruta no encontrada' }));
 
 app.use((err, req, res, next) => {
@@ -24,4 +34,10 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`API escuchando en http://localhost:${PORT}`));
+app.listen(PORT, (err) => {
+  if (err) {
+    console.error('No se pudo iniciar el servidor:', err.message);
+    process.exit(1);
+  }
+  console.log(`API escuchando en http://localhost:${PORT}`);
+});
