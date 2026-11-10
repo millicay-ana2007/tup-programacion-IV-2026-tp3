@@ -1,0 +1,119 @@
+@base = http://localhost:3000/api
+
+### Login
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@test.com",
+  "password": "123456"
+}
+
+### Crear conductor (espera 201)
+# @name crear
+POST {{base}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Carlos",
+  "apellido": "Gomez",
+  "numero_documento": "30123456",
+  "numero_licencia": "LIC-0001",
+  "fecha_alta_licencia": "2018-03-15",
+  "fecha_vencimiento_licencia": "2028-03-15"
+}
+
+### Crear con datos invalidos (espera 400)
+POST {{base}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "",
+  "apellido": "",
+  "numero_documento": "",
+  "numero_licencia": "",
+  "fecha_alta_licencia": "no-es-fecha",
+  "fecha_vencimiento_licencia": "2010-01-01"
+}
+
+### Vencimiento anterior al alta (espera 400)
+POST {{base}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Luis",
+  "apellido": "Perez",
+  "numero_documento": "31222333",
+  "numero_licencia": "LIC-0002",
+  "fecha_alta_licencia": "2020-05-10",
+  "fecha_vencimiento_licencia": "2019-05-10"
+}
+
+### Crear con documento repetido (espera 400)
+POST {{base}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Mario",
+  "apellido": "Lopez",
+  "numero_documento": "30123456",
+  "numero_licencia": "LIC-0003",
+  "fecha_alta_licencia": "2019-01-01",
+  "fecha_vencimiento_licencia": "2029-01-01"
+}
+
+### Listar (espera 200)
+GET {{base}}/conductores
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener por id (espera 200)
+GET {{base}}/conductores/{{crear.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener inexistente (espera 404)
+GET {{base}}/conductores/99999
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener con id invalido (espera 400)
+GET {{base}}/conductores/abc
+Authorization: Bearer {{login.response.body.token}}
+
+### Actualizar (espera 200)
+PUT {{base}}/conductores/{{crear.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Carlos",
+  "apellido": "Gomez Ruiz",
+  "numero_documento": "30123456",
+  "numero_licencia": "LIC-0001",
+  "fecha_alta_licencia": "2018-03-15",
+  "fecha_vencimiento_licencia": "2029-03-15"
+}
+
+### Actualizar inexistente (espera 404)
+PUT {{base}}/conductores/99999
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "X",
+  "apellido": "Y",
+  "numero_documento": "99999999",
+  "numero_licencia": "LIC-9999",
+  "fecha_alta_licencia": "2020-01-01",
+  "fecha_vencimiento_licencia": "2030-01-01"
+}
+
+### Sin token (espera 401)
+GET {{base}}/conductores
+
+### Eliminar (espera 204)
+DELETE {{base}}/conductores/{{crear.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}

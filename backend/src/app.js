@@ -7,6 +7,7 @@ import { pool } from './config/db.js';
 import { requireAuth } from './middlewares/auth.js';
 import authRoutes from './routes/auth.routes.js';
 import vehiculosRoutes from './routes/vehiculos.routes.js';
+import conductoresRoutes from './routes/conductores.routes.js';
 
 const app = express();
 app.use(cors({ origin: 'http://localhost:5173' }));
@@ -28,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.get('/api/perfil', requireAuth, (req, res) => res.json(req.user));
 
 app.use('/api/vehiculos', requireAuth, vehiculosRoutes);
+app.use('/api/conductores', requireAuth, conductoresRoutes);
 
 app.use((req, res) => res.status(404).json({ message: 'Ruta no encontrada' }));
 
