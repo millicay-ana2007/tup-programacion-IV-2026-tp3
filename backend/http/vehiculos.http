@@ -1,0 +1,100 @@
+@base = http://localhost:3000/api
+
+### Login
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@test.com",
+  "password": "123456"
+}
+
+### Crear vehiculo (espera 201)
+# @name crear
+POST {{base}}/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "Mercedes-Benz",
+  "modelo": "Actros",
+  "patente": "AB123CD",
+  "anio": 2020,
+  "capacidad_carga": 18000
+}
+
+### Crear con datos invalidos (espera 400)
+POST {{base}}/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "",
+  "modelo": "Actros",
+  "patente": "",
+  "anio": 1800,
+  "capacidad_carga": -5
+}
+
+### Crear con patente repetida (espera 400)
+POST {{base}}/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "Scania",
+  "modelo": "R450",
+  "patente": "AB123CD",
+  "anio": 2021,
+  "capacidad_carga": 20000
+}
+
+### Listar (espera 200)
+GET {{base}}/vehiculos
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener por id (espera 200)
+GET {{base}}/vehiculos/{{crear.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener inexistente (espera 404)
+GET {{base}}/vehiculos/99999
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener con id invalido (espera 400)
+GET {{base}}/vehiculos/abc
+Authorization: Bearer {{login.response.body.token}}
+
+### Actualizar (espera 200)
+PUT {{base}}/vehiculos/{{crear.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "Mercedes-Benz",
+  "modelo": "Actros 2651",
+  "patente": "AB123CD",
+  "anio": 2021,
+  "capacidad_carga": 19000
+}
+
+### Actualizar inexistente (espera 404)
+PUT {{base}}/vehiculos/99999
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "X",
+  "modelo": "Y",
+  "patente": "ZZ999ZZ",
+  "anio": 2020,
+  "capacidad_carga": 100
+}
+
+### Sin token (espera 401)
+GET {{base}}/vehiculos
+
+### Eliminar (espera 204)
+DELETE {{base}}/vehiculos/{{crear.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
