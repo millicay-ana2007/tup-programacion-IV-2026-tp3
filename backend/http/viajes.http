@@ -1,0 +1,253 @@
+@base = http://localhost:3000/api
+
+### Login
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@test.com",
+  "password": "123456"
+}
+
+### Crear vehiculo de prueba (espera 201)
+# @name veh
+POST {{base}}/vehiculos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "marca": "Volvo",
+  "modelo": "FH 460",
+  "patente": "VJ001AA",
+  "anio": 2022,
+  "capacidad_carga": 25000
+}
+
+### Crear conductor de prueba (espera 201)
+# @name cond
+POST {{base}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Marta",
+  "apellido": "Diaz",
+  "numero_documento": "35000111",
+  "numero_licencia": "LIC-V001",
+  "fecha_alta_licencia": "2019-06-01",
+  "fecha_vencimiento_licencia": "2030-06-01"
+}
+
+### Crear conductor con licencia vencida (espera 201)
+# @name vencido
+POST {{base}}/conductores
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "nombre": "Pedro",
+  "apellido": "Rios",
+  "numero_documento": "35000222",
+  "numero_licencia": "LIC-V002",
+  "fecha_alta_licencia": "2010-01-01",
+  "fecha_vencimiento_licencia": "2015-01-01"
+}
+
+### Crear viaje (espera 201)
+# @name viaje
+POST {{base}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": {{veh.response.body.id}},
+  "conductor_id": {{cond.response.body.id}},
+  "fecha_salida": "2026-11-10 08:00",
+  "fecha_llegada": "2026-11-10 18:30",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 450.5,
+  "observaciones": "Carga de alimentos"
+}
+
+### Crear segundo viaje (espera 201)
+# @name viaje2
+POST {{base}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": {{veh.response.body.id}},
+  "conductor_id": {{cond.response.body.id}},
+  "fecha_salida": "2026-11-12 07:00",
+  "fecha_llegada": "2026-11-12 10:00",
+  "origen": "La Rioja",
+  "destino": "Chilecito",
+  "kilometros": 120
+}
+
+### Crear viaje con datos invalidos (espera 400)
+POST {{base}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": "abc",
+  "conductor_id": 0,
+  "fecha_salida": "ayer",
+  "fecha_llegada": "2026-13-45 10:00",
+  "origen": "",
+  "destino": "",
+  "kilometros": -10
+}
+
+### Llegada anterior a la salida (espera 400)
+POST {{base}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": {{veh.response.body.id}},
+  "conductor_id": {{cond.response.body.id}},
+  "fecha_salida": "2026-11-10 08:00",
+  "fecha_llegada": "2026-11-09 08:00",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 450
+}
+
+### Vehiculo inexistente (espera 404)
+POST {{base}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": 99999,
+  "conductor_id": {{cond.response.body.id}},
+  "fecha_salida": "2026-11-10 08:00",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 450
+}
+
+### Conductor inexistente (espera 404)
+POST {{base}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": {{veh.response.body.id}},
+  "conductor_id": 99999,
+  "fecha_salida": "2026-11-10 08:00",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 450
+}
+
+### Conductor con licencia vencida (espera 403)
+POST {{base}}/viajes
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": {{veh.response.body.id}},
+  "conductor_id": {{vencido.response.body.id}},
+  "fecha_salida": "2026-11-10 08:00",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 450
+}
+
+### Listar todos (espera 200)
+GET {{base}}/viajes
+Authorization: Bearer {{login.response.body.token}}
+
+### Historial por vehiculo (espera 200)
+GET {{base}}/viajes?vehiculo_id={{veh.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Historial por conductor (espera 200)
+GET {{base}}/viajes?conductor_id={{cond.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Filtro invalido (espera 400)
+GET {{base}}/viajes?vehiculo_id=abc
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener por id (espera 200)
+GET {{base}}/viajes/{{viaje.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener inexistente (espera 404)
+GET {{base}}/viajes/99999
+Authorization: Bearer {{login.response.body.token}}
+
+### Obtener con id invalido (espera 400)
+GET {{base}}/viajes/abc
+Authorization: Bearer {{login.response.body.token}}
+
+### Km por vehiculo (espera 200: total_km 570.5 y cantidad_viajes 2)
+GET {{base}}/viajes/km?vehiculo_id={{veh.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Km por conductor (espera 200: total_km 570.5 y cantidad_viajes 2)
+GET {{base}}/viajes/km?conductor_id={{cond.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Km sin parametros (espera 400)
+GET {{base}}/viajes/km
+Authorization: Bearer {{login.response.body.token}}
+
+### Actualizar viaje (espera 200)
+PUT {{base}}/viajes/{{viaje.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": {{veh.response.body.id}},
+  "conductor_id": {{cond.response.body.id}},
+  "fecha_salida": "2026-11-10 08:00",
+  "fecha_llegada": "2026-11-10 19:00",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 460.5,
+  "observaciones": "Carga actualizada"
+}
+
+### Actualizar inexistente (espera 404)
+PUT {{base}}/viajes/99999
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "vehiculo_id": {{veh.response.body.id}},
+  "conductor_id": {{cond.response.body.id}},
+  "fecha_salida": "2026-11-10 08:00",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 100
+}
+
+### Sin token (espera 401)
+GET {{base}}/viajes
+
+### Eliminar viaje (espera 204)
+DELETE {{base}}/viajes/{{viaje.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Eliminar segundo viaje (espera 204)
+DELETE {{base}}/viajes/{{viaje2.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Eliminar conductor de prueba (espera 204)
+DELETE {{base}}/conductores/{{cond.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Eliminar conductor vencido (espera 204)
+DELETE {{base}}/conductores/{{vencido.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Eliminar vehiculo de prueba (espera 204)
+DELETE {{base}}/vehiculos/{{veh.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
