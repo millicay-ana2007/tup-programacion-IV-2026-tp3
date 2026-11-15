@@ -1,0 +1,72 @@
+:root {
+  --azul: #1e3a8a;
+  --azul-claro: #1d4ed8;
+  --fondo: #f3f4f6;
+  --texto: #111827;
+  --borde: #d1d5db;
+  --error: #b91c1c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 32px;
+  background: var(--azul);
+  color: white;
+}
+.navbar-brand { font-weight: 700; font-size: 1.1rem; }
+.navbar-links { display: flex; gap: 16px; }
+.navbar-links a { color: white; text-decoration: none; }
+.navbar-links a:hover, .navbar-links a.active { text-decoration: underline; }
+
+.container { max-width: 960px; margin: 0 auto; padding: 32px 16px; }
+
+.card {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 28px;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.form-group label { font-weight: 600; }
+.form-group input {
+  padding: 10px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.form-group input.invalid { border-color: var(--error); }
+.error-text { color: var(--error); font-size: 0.875rem; }
+
+.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--azul-claro);
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:hover { background: var(--azul); }
+
+.hero { text-align: center; padding: 48px 16px; }
+.hero h1 { font-size: 2.2rem; margin-bottom: 12px; }
+.hero p { max-width: 560px; margin: 0 auto 24px; color: #4b5563; }
+.hero .btn { width: auto; padding: 12px 28px; }
