@@ -6,6 +6,7 @@ function Navbar() {
       <span className="navbar-brand">🚚 Transporte</span>
       <nav className="navbar-links">
         <NavLink to="/" end>Inicio</NavLink>
+        <NavLink to="/login">Iniciar sesión</NavLink>
       </nav>
     </header>
   )
