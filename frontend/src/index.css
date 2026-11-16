@@ -115,3 +115,27 @@ body {
 }
 .table th { background: var(--fondo); font-weight: 600; }
 .empty-text { color: #4b5563; }
+
+.panel {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+}
+.panel h3 { margin-top: 0; }
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0 16px;
+}
+.btn-auto { width: auto; padding: 12px 28px; }
+.success-box {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border: 1px solid #15803d;
+  border-radius: 8px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.9rem;
+}
