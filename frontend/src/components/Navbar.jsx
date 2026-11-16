@@ -7,6 +7,7 @@ function Navbar() {
       <nav className="navbar-links">
         <NavLink to="/" end>Inicio</NavLink>
         <NavLink to="/login">Iniciar sesión</NavLink>
+        <NavLink to="/registro">Registrarse</NavLink>
       </nav>
     </header>
   )
