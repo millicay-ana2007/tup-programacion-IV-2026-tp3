@@ -82,3 +82,20 @@ body {
 }
 
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+.btn-link {
+  padding: 6px 12px;
+  border: 1px solid white;
+  border-radius: 8px;
+  background: none;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.btn-link:hover { background: rgba(255, 255, 255, 0.15); }
