@@ -12,6 +12,7 @@ function Vehiculos() {
   const [recarga, setRecarga] = useState(0)
 
   const [form, setForm] = useState(FORM_VACIO)
+  const [editandoId, setEditandoId] = useState(null)
   const [errors, setErrors] = useState({})
   const [errorServidor, setErrorServidor] = useState('')
   const [mensaje, setMensaje] = useState('')
@@ -42,6 +43,28 @@ function Vehiculos() {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleEditar = (v) => {
+    setEditandoId(v.id)
+    setForm({
+      patente: v.patente,
+      marca: v.marca,
+      modelo: v.modelo,
+      anio: String(v.anio),
+      capacidad_carga: String(Number(v.capacidad_carga)),
+    })
+    setErrors({})
+    setErrorServidor('')
+    setMensaje('')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleCancelar = () => {
+    setEditandoId(null)
+    setForm(FORM_VACIO)
+    setErrors({})
+    setErrorServidor('')
   }
 
   const validate = () => {
@@ -81,17 +104,25 @@ function Vehiculos() {
     setMensaje('')
     if (Object.keys(nuevos).length > 0) return
 
+    const datos = {
+      patente: form.patente.trim().toUpperCase(),
+      marca: form.marca.trim(),
+      modelo: form.modelo.trim(),
+      anio: Number(form.anio),
+      capacidad_carga: Number(form.capacidad_carga),
+    }
+
     setGuardando(true)
     try {
-      await api.post('/vehiculos', {
-        patente: form.patente.trim().toUpperCase(),
-        marca: form.marca.trim(),
-        modelo: form.modelo.trim(),
-        anio: Number(form.anio),
-        capacidad_carga: Number(form.capacidad_carga),
-      })
+      if (editandoId) {
+        await api.put(`/vehiculos/${editandoId}`, datos)
+        setMensaje('Vehículo actualizado correctamente')
+      } else {
+        await api.post('/vehiculos', datos)
+        setMensaje('Vehículo guardado correctamente')
+      }
       setForm(FORM_VACIO)
-      setMensaje('Vehículo guardado correctamente')
+      setEditandoId(null)
       setRecarga((n) => n + 1)
     } catch (err) {
       setErrorServidor(err.message)
@@ -105,7 +136,7 @@ function Vehiculos() {
       <h2>Vehículos</h2>
 
       <div className="panel">
-        <h3>Nuevo vehículo</h3>
+        <h3>{editandoId ? 'Editar vehículo' : 'Nuevo vehículo'}</h3>
         {errorServidor && <div className="error-box">{errorServidor}</div>}
         {mensaje && <div className="success-box">{mensaje}</div>}
         <form onSubmit={handleSubmit} noValidate>
@@ -174,9 +205,24 @@ function Vehiculos() {
               )}
             </div>
           </div>
-          <button type="submit" className="btn btn-auto" disabled={guardando}>
-            {guardando ? 'Guardando...' : 'Guardar vehículo'}
-          </button>
+          <div className="form-actions">
+            <button type="submit" className="btn btn-auto" disabled={guardando}>
+              {guardando
+                ? 'Guardando...'
+                : editandoId
+                  ? 'Guardar cambios'
+                  : 'Guardar vehículo'}
+            </button>
+            {editandoId && (
+              <button
+                type="button"
+                className="btn btn-auto btn-secondary"
+                onClick={handleCancelar}
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
         </form>
       </div>
 
@@ -198,16 +244,26 @@ function Vehiculos() {
                 <th>Modelo</th>
                 <th>Año</th>
                 <th>Capacidad de carga</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {vehiculos.map((v) => (
-                <tr key={v.id}>
+                <tr key={v.id} className={v.id === editandoId ? 'fila-activa' : ''}>
                   <td>{v.patente}</td>
                   <td>{v.marca}</td>
                   <td>{v.modelo}</td>
                   <td>{v.anio}</td>
                   <td>{Number(v.capacidad_carga).toLocaleString('es-AR')}</td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-small btn-secondary"
+                      onClick={() => handleEditar(v)}
+                    >
+                      Editar
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

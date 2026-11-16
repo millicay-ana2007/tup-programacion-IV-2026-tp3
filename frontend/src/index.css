@@ -139,3 +139,13 @@ body {
   color: #15803d;
   font-size: 0.9rem;
 }
+
+.form-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn-secondary {
+  background: white;
+  color: var(--azul-claro);
+  border: 1px solid var(--azul-claro);
+}
+.btn-secondary:hover { background: var(--fondo); }
+.btn-small { width: auto; padding: 6px 14px; font-size: 0.9rem; }
+.table tr.fila-activa td { background: #eff6ff; }
