@@ -15,6 +15,7 @@ function Navbar() {
       <span className="navbar-brand">🚚 Transporte</span>
       <nav className="navbar-links">
         <NavLink to="/" end>Inicio</NavLink>
+        {estaLogueado && <NavLink to="/vehiculos">Vehículos</NavLink>}
         {!estaLogueado && <NavLink to="/login">Iniciar sesión</NavLink>}
         {!estaLogueado && <NavLink to="/registro">Registrarse</NavLink>}
       </nav>
