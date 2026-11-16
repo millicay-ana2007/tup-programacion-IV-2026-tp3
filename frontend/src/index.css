@@ -70,3 +70,15 @@ body {
 .hero h1 { font-size: 2.2rem; margin-bottom: 12px; }
 .hero p { max-width: 560px; margin: 0 auto 24px; color: #4b5563; }
 .hero .btn { width: auto; padding: 12px 28px; }
+
+.error-box {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--error);
+  border-radius: 8px;
+  background: #fee2e2;
+  color: var(--error);
+  font-size: 0.9rem;
+}
+
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }

@@ -1,10 +1,17 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { api } from '../services/api'
+import { useAuth } from '../context/useAuth'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
+  const [errorServidor, setErrorServidor] = useState('')
+  const [cargando, setCargando] = useState(false)
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -25,19 +32,34 @@ function Login() {
     return nuevos
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const nuevos = validate()
     setErrors(nuevos)
+    setErrorServidor('')
     if (Object.keys(nuevos).length > 0) return
-    // Próximo paso: llamar a la API del backend (POST /api/auth/login)
-    console.log('Datos válidos', form)
+
+    setCargando(true)
+    try {
+      const data = await api.post(
+        '/auth/login',
+        { email: form.email.trim(), password: form.password },
+        { auth: false },
+      )
+      login(data.token, data.usuario)
+      navigate('/')
+    } catch (err) {
+      setErrorServidor(err.message)
+    } finally {
+      setCargando(false)
+    }
   }
 
   return (
     <div className="card">
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleSubmit} noValidate>
+        {errorServidor && <div className="error-box">{errorServidor}</div>}
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -62,7 +84,9 @@ function Login() {
           />
           {errors.password && <span className="error-text">{errors.password}</span>}
         </div>
-        <button type="submit" className="btn">Ingresar</button>
+        <button type="submit" className="btn" disabled={cargando}>
+          {cargando ? 'Ingresando...' : 'Ingresar'}
+        </button>
       </form>
     </div>
   )
