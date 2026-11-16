@@ -67,6 +67,27 @@ function Vehiculos() {
     setErrorServidor('')
   }
 
+  const handleEliminar = async (v) => {
+    const confirmado = window.confirm(`¿Seguro que querés eliminar el vehículo ${v.patente}?`)
+    if (!confirmado) return
+
+    setErrorServidor('')
+    setMensaje('')
+    try {
+      await api.delete(`/vehiculos/${v.id}`)
+      if (editandoId === v.id) {
+        setEditandoId(null)
+        setForm(FORM_VACIO)
+        setErrors({})
+      }
+      setMensaje('Vehículo eliminado correctamente')
+      setRecarga((n) => n + 1)
+    } catch (err) {
+      setErrorServidor(err.message)
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   const validate = () => {
     const nuevos = {}
 
@@ -256,13 +277,22 @@ function Vehiculos() {
                   <td>{v.anio}</td>
                   <td>{Number(v.capacidad_carga).toLocaleString('es-AR')}</td>
                   <td>
-                    <button
-                      type="button"
-                      className="btn btn-small btn-secondary"
-                      onClick={() => handleEditar(v)}
-                    >
-                      Editar
-                    </button>
+                    <div className="acciones">
+                      <button
+                        type="button"
+                        className="btn btn-small btn-secondary"
+                        onClick={() => handleEditar(v)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-small btn-danger"
+                        onClick={() => handleEliminar(v)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

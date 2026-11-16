@@ -149,3 +149,11 @@ body {
 .btn-secondary:hover { background: var(--fondo); }
 .btn-small { width: auto; padding: 6px 14px; font-size: 0.9rem; }
 .table tr.fila-activa td { background: #eff6ff; }
+
+.acciones { display: flex; gap: 8px; }
+.btn-danger {
+  background: white;
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+.btn-danger:hover { background: #fee2e2; }
