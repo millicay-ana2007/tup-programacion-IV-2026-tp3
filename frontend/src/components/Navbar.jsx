@@ -16,6 +16,7 @@ function Navbar() {
       <nav className="navbar-links">
         <NavLink to="/" end>Inicio</NavLink>
         {estaLogueado && <NavLink to="/vehiculos">Vehículos</NavLink>}
+        {estaLogueado && <NavLink to="/conductores">Conductores</NavLink>}
         {!estaLogueado && <NavLink to="/login">Iniciar sesión</NavLink>}
         {!estaLogueado && <NavLink to="/registro">Registrarse</NavLink>}
       </nav>
