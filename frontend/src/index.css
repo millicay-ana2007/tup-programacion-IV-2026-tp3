@@ -157,3 +157,26 @@ body {
   border: 1px solid var(--error);
 }
 .btn-danger:hover { background: #fee2e2; }
+
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: white;
+}
+.form-group select.invalid,
+.form-group textarea.invalid { border-color: var(--error); }
+.form-group-wide { grid-column: 1 / -1; }
+
+.resumen { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
+.resumen-item {
+  padding: 16px 24px;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+}
+.resumen-item span { display: block; color: #4b5563; font-size: 0.9rem; }
+.resumen-item strong { display: block; margin-top: 4px; font-size: 1.6rem; }
