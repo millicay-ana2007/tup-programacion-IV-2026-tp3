@@ -2,10 +2,12 @@ import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
 import Conductores from './pages/Conductores'
+import Historial from './pages/Historial'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Vehiculos from './pages/Vehiculos'
+import Viajes from './pages/Viajes'
 
 function App() {
   return (
@@ -29,6 +31,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Conductores />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/viajes"
+            element={
+              <ProtectedRoute>
+                <Viajes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/historial"
+            element={
+              <ProtectedRoute>
+                <Historial />
               </ProtectedRoute>
             }
           />

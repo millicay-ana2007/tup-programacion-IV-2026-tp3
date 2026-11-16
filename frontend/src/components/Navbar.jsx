@@ -17,6 +17,8 @@ function Navbar() {
         <NavLink to="/" end>Inicio</NavLink>
         {estaLogueado && <NavLink to="/vehiculos">Vehículos</NavLink>}
         {estaLogueado && <NavLink to="/conductores">Conductores</NavLink>}
+        {estaLogueado && <NavLink to="/viajes">Viajes</NavLink>}
+        {estaLogueado && <NavLink to="/historial">Historial</NavLink>}
         {!estaLogueado && <NavLink to="/login">Iniciar sesión</NavLink>}
         {!estaLogueado && <NavLink to="/registro">Registrarse</NavLink>}
       </nav>
