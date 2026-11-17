@@ -180,3 +180,18 @@ body {
 }
 .resumen-item span { display: block; color: #4b5563; font-size: 0.9rem; }
 .resumen-item strong { display: block; margin-top: 4px; font-size: 1.6rem; }
+
+.hero {
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+  color: white;
+  border-radius: 12px;
+  padding: 72px 16px;
+}
+.hero p { color: #e5e7eb; }
+
+.hero {
+  background: none;
+  color: var(--texto);
+}
+.hero h1 { color: var(--texto); }
+.hero p { color: #000000; }
