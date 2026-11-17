@@ -1,7 +1,7 @@
 :root {
-  --azul: #1e3a8a;
-  --azul-claro: #1d4ed8;
-  --fondo: #f3f4f6;
+  --rosa-oscura: #9d174d;
+  --rosa-claro: #db2777;
+  --fondo: #fdf2f8;
   --texto: #111827;
   --borde: #d1d5db;
   --error: #b91c1c;
@@ -21,7 +21,7 @@ body {
   align-items: center;
   gap: 24px;
   padding: 16px 32px;
-  background: var(--azul);
+  background: var(--rosa-oscura);
   color: white;
 }
 .navbar-brand { font-weight: 700; font-size: 1.1rem; }
@@ -57,14 +57,14 @@ body {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: var(--azul-claro);
+  background: var(--rosa-claro);
   color: white;
   font-size: 1rem;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
 }
-.btn:hover { background: var(--azul); }
+.btn:hover { background: var(--rosa-oscura); }
 
 .hero { text-align: center; padding: 48px 16px; }
 .hero h1 { font-size: 2.2rem; margin-bottom: 12px; }
@@ -143,12 +143,12 @@ body {
 .form-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .btn-secondary {
   background: white;
-  color: var(--azul-claro);
-  border: 1px solid var(--azul-claro);
+  color: var(--rosa-claro);
+  border: 1px solid var(--rosa-claro);
 }
 .btn-secondary:hover { background: var(--fondo); }
 .btn-small { width: auto; padding: 6px 14px; font-size: 0.9rem; }
-.table tr.fila-activa td { background: #eff6ff; }
+.table tr.fila-activa td { background: #f5f3ff; }
 
 .acciones { display: flex; gap: 8px; }
 .btn-danger {
